@@ -59,10 +59,15 @@ exports.updateTodo = updateTodo;
 const removeTodo = async (req, res, next) => {
     try {
         const { id } = req.params;
-        let todos = await todoMongo_1.default.deleteOne(id);
-        return res
-            .status(200)
-            .json({ message: "Updated todo item successfully", data: todos });
+        let todos = await todoMongo_1.default.deleteOne({
+            _id: id,
+        });
+        if (todos.deletedCount)
+            return res
+                .status(200)
+                .json({ message: "Removed todo item successfully", data: todos });
+        else
+            return res.status(200).json({ message: "Didn't remove", data: todos });
     }
     catch (err) {
         return res.status(500).json({ message: err.message });

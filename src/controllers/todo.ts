@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 // RequestHandler is shortcut for {Request, Response, NextFunction}
 import Todo, { TodoModel } from "../models/todoMongo";
+import { ObjectId } from "mongodb";
 
 export const createTodo: RequestHandler = async (req, res, next) => {
   // Another way to write: const text = req.body.text;
@@ -60,10 +61,14 @@ export const removeTodo: RequestHandler<{ id: string }> = async (
 ) => {
   try {
     const { id } = req.params;
-    let todos = await Todo.deleteOne(id);
-    return res
-      .status(200)
-      .json({ message: "Updated todo item successfully", data: todos });
+    let todos = await Todo.deleteOne({
+      _id: id,
+    });
+    if (todos.deletedCount)
+      return res
+        .status(200)
+        .json({ message: "Removed todo item successfully", data: todos });
+    else return res.status(200).json({ message: "Didn't remove", data: todos });
   } catch (err: any) {
     return res.status(500).json({ message: err.message });
   }
