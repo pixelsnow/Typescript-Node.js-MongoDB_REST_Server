@@ -11,13 +11,6 @@ const app = (0, express_1.default)();
 app.use((0, body_parser_1.json)());
 app.use((0, body_parser_1.urlencoded)({ extended: true }));
 app.listen(4000, () => console.log("server is running at port 4000..."));
-/* const url = "mongodb://localhost:27017/todos";
-mongoose
-  .connect(url, {})
-  .then((result) => console.log("database connected"))
-  .catch((err) => console.log(err));
-  
-const db = mongoose.connection;*/
 mongoose_1.default.connect("mongodb://localhost:27017/todos")
     .then((result) => console.log("database connected"))
     .catch((err) => console.log(err));
